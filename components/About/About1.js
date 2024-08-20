@@ -61,7 +61,7 @@ const About1 = ({ clientHeight }) => {
           </span>
           <span className="about-2 leading-tight">
             I take responsibility to craft a good user experience using modern
-            frontend architecture.{" "}
+            web architecture.{" "}
           </span>
         </h1>
       </div>

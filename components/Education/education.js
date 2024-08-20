@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
+import { MENULINKS } from "../../constants";
 
 const Education = () => {
   const sectionRef = useRef(null);
@@ -41,9 +42,20 @@ const Education = () => {
     };
   }, []);
 
+
+{/* <section
+      ref={sectionRef}
+      id={MENULINKS[4].ref}
+      className="mt-30 w-full relative select-none bg-black pt-20 sm:pt-10 md:pt-5 lg:pt-1 pb-20"
+    ></section> */}
+
+
+
   return (
+  
     <section
       ref={sectionRef}
+      id={MENULINKS[1].ref}
       className="flex flex-col justify-center p-52 relative bg-background text-foreground"
     >
       <span

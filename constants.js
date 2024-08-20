@@ -3,7 +3,7 @@ export const METADATA = {
   title: "Portfolio | Hrithik Shetty",
   description:
     "Myself a passionate Frontend Developer, Backend Developer, Competitive Programmer dedicated to crafting aesthetic and modern apps that captivate and engage users.",
-  siteUrl: "",
+  siteUrl: "hrithikshetty.vercel.com",
   twitterHandle: "@hrithik_shetty",
   keywords: [
     "Hrithik Shetty",
@@ -15,7 +15,7 @@ export const METADATA = {
     "Folio",
   ].join(", "),
   image:
-    "https://res.cloudinary.com/dywdhyojt/image/upload/v1721378510/social-preview.png",
+    "",
   language: "English",
   themeColor: "#000000",
 };
@@ -74,7 +74,7 @@ export const SOCIAL_LINKS = [
   },
   {
     name: "twitter",
-    url: "https://twitter.com/hrithik_shetty",
+    url: "https://twitter.com/hrithikshetty44",
   },
 ];
 
@@ -134,16 +134,16 @@ export const PROJECTS = [
       "System That Employs AI Services and Steganography Techniques to Secure Sensitive Information Within Digital Images,",
     gradient: ["#000066", "#6699FF"],
     url: "https://github.com/Hrithikshetty/Secret-Pixels/",
-    tech: ["react", "next", "flask", "langchain", "flask"],
+    tech: ["react", "nextjs", "flask", "openai","python"],
   },
   {
     name: "Auto-Fis",
-    image: "/projects/autofis.png",
+    image: "/projects/auto-fis.png",
     blurImage: "/projects/blur/autofis-blur.png",
     description: "An ML Web Application to Accurately Identify Fish Spicies from Imagery.",
     gradient: ["#142D46", "#2E4964"],
     url: "https://github.com/Hrithikshetty/Marine_Classification/",
-    tech: ["ML","next","python", "flask","tailwind"],
+    tech: ["nextjs","python", "flask","tailwindcss","nodejs"],
   }
 ];
 
@@ -239,7 +239,7 @@ export const WORK_CONTENTS = {
   ],
 };
 
-export const GTAG = "G-5HCTL2TJ5W";
+export const GTAG = "";
 
 
 
