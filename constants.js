@@ -3,7 +3,7 @@ export const METADATA = {
   title: "Portfolio | Hrithik Shetty",
   description:
     "Myself a passionate Frontend Developer, Backend Developer, Competitive Programmer dedicated to crafting aesthetic and modern apps that captivate and engage users.",
-  siteUrl: "hrithikshetty.vercel.com",
+  siteUrl: "hrithikshetty.vercel.app",
   twitterHandle: "@hrithik_shetty",
   keywords: [
     "Hrithik Shetty",
@@ -239,7 +239,7 @@ export const WORK_CONTENTS = {
   ],
 };
 
-export const GTAG = "";
+export const GTAG = "G-K4M09RT4DT";
 
 
 
