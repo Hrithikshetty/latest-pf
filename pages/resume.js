@@ -1,4 +1,5 @@
 import Button from "../components/Button/Button";
+import Image from 'next/image';  // Import the Image component
 
 export default function Component() {
   // Assuming your resume PDF is located in the public folder as resume.pdf
@@ -26,7 +27,7 @@ export default function Component() {
 
       <div className="mt-4 flex flex-1 flex-col rounded-lg border-4 border-[#6b49c8] bg-white p-3 md:p-5 lg:p-5">
         <div className="flex flex-col items-center">
-          <img
+          <Image
             src="/placeholder.svg"
             alt="Profile Picture"
             width={120}

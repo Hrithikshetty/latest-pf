@@ -52,7 +52,7 @@ const Footer = () => {
               Developed and Maintained by {" "}
               <button onClick={handleClick} className="link cursor-none">
               </button>{" "}
-              <span className="text-white">Hrithik Shetty</span> with " ❤️ "
+              <span className="text-white">Hrithik Shetty</span> with  ❤️ 
             </p>
           </div>
         </div>
