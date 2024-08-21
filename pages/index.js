@@ -27,6 +27,12 @@ export default function Home() {
   const [clientWidth, setClientWidth] = useState(0);
 
   useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2600);
+  }, []);
+
+  useEffect(() => {
     const { innerWidth, innerHeight, orientation, history } = window;
 
     const result =
