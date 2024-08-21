@@ -37,10 +37,10 @@ export const MENULINKS = [
     name: "Projects",
     ref: "projects",
   },
-  {
-    name: "Work",
-    ref: "work",
-  },
+  // {
+  //   name: "Work",
+  //   ref: "work",
+  // },
   {
     name: "Contact",
     ref: "contact",
