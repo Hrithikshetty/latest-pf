@@ -15,7 +15,6 @@ import Work from "@/components/Work/Work";
 import Collaboration from "@/components/Collaboration/Collaboration";
 import Contact from "@/components/Contact/Contact";
 import Footer from "@/components/Footer/Footer";
-import { displayFancyLogs } from "utils/log";
 import Education from './../components/Education/education';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -26,14 +25,6 @@ export default function Home() {
   const [isDesktop, setIsDesktop] = useState(true);
   const [clientHeight, setClientHeight] = useState(0);
   const [clientWidth, setClientWidth] = useState(0);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2600);
-
-    displayFancyLogs();
-  }, []);
 
   useEffect(() => {
     const { innerWidth, innerHeight, orientation, history } = window;
@@ -64,7 +55,7 @@ export default function Home() {
               role="img"
               className="text-gray-light-1 opacity-10 sm:text-9xl xs:text-8xl inline-block -z-10 absolute rotate-90 right-0 md:top-52 xs:top-96"
             >
-              Hrithik
+              Hrithik Shetty
             </div>
             <div className="fixed top-0 left-0 h-screen w-screen -z-1" />
             <Hero />
