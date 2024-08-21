@@ -83,7 +83,7 @@ const Projects = ({ isDesktop, clientHeight }) => {
   return (
     <section
       ref={sectionRef}
-      id={MENULINKS[2].ref}
+      id={MENULINKS[3].ref}
       className={`${
         isDesktop && "min-h-screen"
       } w-full relative select-none section-container transform-gpu`}

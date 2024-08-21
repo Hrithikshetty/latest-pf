@@ -33,7 +33,7 @@ const Skills = () => {
   return (
     <section
       ref={sectionRef}
-      id={MENULINKS[1].ref}
+      id={MENULINKS[2].ref}
       className="w-full relative select-none mt-44"
     >
       <div className="section-container py-16 flex flex-col justify-center">
