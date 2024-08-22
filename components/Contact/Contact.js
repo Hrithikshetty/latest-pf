@@ -251,7 +251,7 @@ const Contact = () => {
   return (
     <section
       ref={sectionRef}
-      id={MENULINKS[5].ref}
+      id={MENULINKS[4].ref}
       className="mt-30 w-full relative select-none bg-black pt-20 sm:pt-10 md:pt-5 lg:pt-1 pb-20"
     >
       <div>
