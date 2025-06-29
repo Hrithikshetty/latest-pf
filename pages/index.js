@@ -16,6 +16,7 @@ import Collaboration from "@/components/Collaboration/Collaboration";
 import Contact from "@/components/Contact/Contact";
 import Footer from "@/components/Footer/Footer";
 import Education from './../components/Education/education';
+import Experience from "@/components/experience/experiece";
 
 gsap.registerPlugin(ScrollTrigger);
 gsap.config({ nullTargetWarn: false });
@@ -67,6 +68,7 @@ export default function Home() {
             <div className="fixed top-0 left-0 h-screen w-screen -z-1" />
             <Hero />
             <About1 clientHeight={clientHeight} />
+            <Experience/>
             <Education/>
             <Skills />
             <About2 clientHeight={clientHeight} />
