@@ -25,7 +25,7 @@ const JOURNEY_STAGES = [
     period: "2021 – Present",
     highlight: "Undergraduate · CSE Data Science",
     description:
-      "Pursuing my 4th year undergraduate degree — deepening expertise in data science, software engineering, and building real-world projects alongside coursework.",
+      "Pursued my 4 year's of undergraduate degree in Computer Science and Engineering with Data Science specialization — deepening expertise in data science, software engineering, and building real-world projects alongside coursework.",
     tags: ["B.E.", "Data Science", "Engineering"],
   },
   {
