@@ -1,354 +1,518 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+/* eslint-disable @next/next/no-img-element */
+
+import Image from "next/image"
+import { useCallback, useLayoutEffect, useRef, useState } from "react"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger"
-import { ScrollToPlugin } from "gsap/dist/ScrollToPlugin"
-import { MENULINKS } from "../../constants"
-import { ChevronRight, ExternalLink, MapPin, Clock } from "lucide-react"
+import { MapPin, Calendar, Sparkles } from "lucide-react"
 
-// Sample data - replace with your actual experience
 const EXPERIENCE_DATA = [
   {
-    id: "exp1",
-    company: "TechNova Solutions",
-    position: "Senior Frontend Developer",
-    period: "2022 - Present",
-    location: "San Francisco, CA",
-    type: "Remote",
-    description:
-      "Leading the frontend development team in creating responsive and accessible web applications using React, Next.js, and TypeScript. Implemented CI/CD pipelines and improved performance by 40%.",
-    technologies: ["React", "TypeScript", "Next.js", "GSAP", "Tailwind CSS"],
-    logo: "TN",
-  },
-  {
-    id: "exp2",
-    company: "Digital Dynamics",
-    position: "UI/UX Engineer",
-    period: "2020 - 2022",
-    location: "New York, NY",
+    id: "bridgestone",
+    company: "Bridgestone Mobility Solutions",
+    position: "Associate Software Engineer",
+    employmentType: "Full-time",
+    period: "Jun 2025 – Present",
+    duration: "1 yr",
+    location: "Bengaluru, Karnataka, India",
     type: "Hybrid",
+    logoSrc: "/skills/experience/bridgestone.png",
     description:
-      "Designed and developed user interfaces for enterprise clients. Created design systems and component libraries that improved development efficiency by 30%.",
-    technologies: ["Vue.js", "Figma", "SCSS", "JavaScript", "Storybook"],
-    logo: "DD",
+      "Building and maintaining enterprise mobility solutions across web and mobile platforms. Collaborating with cross-functional teams on scalable applications, cloud deployments, and AEM integrations.",
+    technologies: [
+      "Flutter",
+      "Dart",
+      "SCSS",
+      "HTML",
+      "React",
+      "AWS",
+      "Docker",
+      "AEM",
+      "Java",
+      "Spring Boot",
+    ],
   },
   {
-    id: "exp3",
-    company: "Quantum Innovations",
-    position: "Frontend Developer",
-    period: "2018 - 2020",
-    location: "Boston, MA",
+    id: "winman",
+    company: "Winman Software India LLP",
+    position: "Software Engineer Intern",
+    employmentType: "Internship",
+    period: "Feb 2025 – May 2025",
+    duration: "4 mos",
+    location: "Mangaluru, Karnataka, India",
     type: "On-site",
+    logoSrc: "/skills/experience/winman.png",
     description:
-      "Developed responsive web applications and implemented animations using GSAP. Collaborated with designers to create pixel-perfect implementations of designs.",
-    technologies: ["JavaScript", "HTML5", "CSS3", "GSAP", "jQuery"],
-    logo: "QI",
+      "Contributed to software quality assurance and database operations. Performed manual testing cycles, documented defects, and supported SQL-based data validation for production workflows.",
+    technologies: ["Microsoft SQL", "Manual Testing"],
+  },
+  {
+    id: "dreamsoft",
+    company: "Dreamsoft Innovations Private Limited",
+    position: "Web Development Intern",
+    employmentType: "Internship",
+    period: "Oct 2023 – Nov 2023",
+    duration: "2 mos",
+    location: "Mangaluru, Karnataka, India",
+    type: "On-site",
+    logoSrc: "/skills/experience/dreamsoft.png",
+    description:
+      "Developed full-stack web features for client projects using modern JavaScript tooling. Built responsive interfaces, REST APIs, and real-time layers with MongoDB-backed persistence.",
+    technologies: [
+      "React",
+      "Tailwind CSS",
+      "WebSockets",
+      "Express.js",
+      "MongoDB",
+      "Node.js",
+    ],
   },
 ]
 
+function CompanyLogo({ src, alt, size = "md", wide = false, className = "" }) {
+  const sizes = {
+    sm: wide ? "h-11 w-[3.25rem] p-1.5" : "h-11 w-11 p-2",
+    md: wide ? "h-14 w-[4.5rem] sm:h-16 sm:w-[5.25rem] p-2" : "h-14 w-14 sm:h-16 sm:w-16 p-2.5",
+    lg: wide ? "h-20 w-[5.5rem] sm:h-24 sm:w-[6.75rem] p-2.5" : "h-20 w-20 sm:h-24 sm:w-24 p-3",
+  }
+
+  return (
+    <div
+      className={`flex-shrink-0 rounded-xl bg-white flex items-center justify-center overflow-hidden border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.35)] ${sizes[size]} ${className}`}
+    >
+      <Image
+        src={src}
+        alt={alt}
+        width={96}
+        height={96}
+        className="max-h-full max-w-full w-auto h-auto object-contain object-center"
+        sizes="(max-width: 768px) 44px, 96px"
+      />
+    </div>
+  )
+}
+
 const Experience = () => {
   const sectionRef = useRef(null)
-  const titleRef = useRef(null)
+  const railRef = useRef(null)
+  const indicatorRef = useRef(null)
   const cardsRef = useRef([])
-  const detailsRef = useRef(null)
-  const [activeExp, setActiveExp] = useState(EXPERIENCE_DATA[0].id)
+  const detailRef = useRef(null)
+  const detailContentRef = useRef(null)
+  const detailLogoRef = useRef(null)
+  const glowRef = useRef(null)
+  const [activeId, setActiveId] = useState(EXPERIENCE_DATA[0].id)
+  const activeIndex = EXPERIENCE_DATA.findIndex((e) => e.id === activeId)
+  const activeExp = EXPERIENCE_DATA[activeIndex] ?? EXPERIENCE_DATA[0]
+  const isAnimatingRef = useRef(false)
 
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger, ScrollToPlugin)
+  const moveIndicator = useCallback((index, animate = true) => {
+    const card = cardsRef.current[index]
+    const rail = railRef.current
+    const indicator = indicatorRef.current
+    if (!card || !rail || !indicator) return
 
-    // Initialize refs array
-    cardsRef.current = cardsRef.current.slice(0, EXPERIENCE_DATA.length)
+    const railRect = rail.getBoundingClientRect()
+    const cardRect = card.getBoundingClientRect()
+    const y = cardRect.top - railRect.top + cardRect.height / 2
 
-    // Main timeline for the section
-    const mainTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: sectionRef.current,
-        start: "top 70%",
-        end: "bottom bottom",
-        toggleActions: "play none none reverse",
-      },
-    })
+    if (animate) {
+      gsap.to(indicator, {
+        y,
+        duration: 0.55,
+        ease: "power3.inOut",
+      })
+    } else {
+      gsap.set(indicator, { y })
+    }
+  }, [])
 
-    // Title animation with text reveal and glow effect
-    mainTl.fromTo(
-      titleRef.current,
-      {
-        opacity: 0,
-        y: -50,
-        filter: "blur(10px)",
-      },
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      const mm = gsap.matchMedia()
+
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        gsap.from(".exp-header-reveal", {
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 82%",
+            toggleActions: "play none none reverse",
+          },
+          opacity: 0,
+          y: 48,
+          duration: 1,
+          stagger: 0.1,
+          ease: "power4.out",
+        })
+
+        gsap.from(".exp-rail-card", {
+          scrollTrigger: {
+            trigger: railRef.current,
+            start: "top 78%",
+            toggleActions: "play none none reverse",
+          },
+          opacity: 0,
+          x: -60,
+          rotateY: -12,
+          duration: 0.85,
+          stagger: 0.12,
+          ease: "power3.out",
+          transformPerspective: 800,
+        })
+
+        gsap.from(detailRef.current, {
+          scrollTrigger: {
+            trigger: detailRef.current,
+            start: "top 78%",
+            toggleActions: "play none none reverse",
+          },
+          opacity: 0,
+          x: 80,
+          scale: 0.96,
+          duration: 1,
+          ease: "power3.out",
+        })
+
+        gsap.to(glowRef.current, {
+          opacity: 0.6,
+          scale: 1.05,
+          duration: 4,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+        })
+      })
+    }, sectionRef)
+
+    const t = setTimeout(() => moveIndicator(0, false), 150)
+
+    return () => {
+      ctx.revert()
+      clearTimeout(t)
+    }
+  }, [moveIndicator])
+
+  useLayoutEffect(() => {
+    const onResize = () => {
+      const i = EXPERIENCE_DATA.findIndex((e) => e.id === activeId)
+      if (i >= 0) moveIndicator(i, false)
+    }
+    window.addEventListener("resize", onResize)
+    return () => window.removeEventListener("resize", onResize)
+  }, [activeId, moveIndicator])
+
+  const animateDetailIn = useCallback(() => {
+    const content = detailContentRef.current
+    const logo = detailLogoRef.current
+    if (!content) return
+
+    const blocks = content.querySelectorAll(".detail-animate")
+    const tags = content.querySelectorAll(".exp-tag")
+
+    gsap.fromTo(
+      logo,
+      { scale: 0.85, opacity: 0, rotate: -6 },
+      { scale: 1, opacity: 1, rotate: 0, duration: 0.6, ease: "back.out(1.6)" }
+    )
+
+    gsap.fromTo(
+      blocks,
+      { opacity: 0, y: 28, filter: "blur(6px)" },
       {
         opacity: 1,
         y: 0,
         filter: "blur(0px)",
-        duration: 1.2,
+        duration: 0.65,
+        stagger: 0.08,
         ease: "power3.out",
+      }
+    )
+
+    gsap.fromTo(
+      tags,
+      { opacity: 0, scale: 0.8, y: 16 },
+      {
+        opacity: 1,
+        scale: 1,
+        y: 0,
+        duration: 0.45,
+        stagger: 0.035,
+        ease: "back.out(1.4)",
+        delay: 0.25,
+      }
+    )
+  }, [])
+
+  const selectExperience = useCallback(
+    (id, index) => {
+      if (id === activeId || isAnimatingRef.current) return
+      isAnimatingRef.current = true
+
+      moveIndicator(index)
+
+      const content = detailContentRef.current
+      const detail = detailRef.current
+
+      gsap.to(content, {
+        opacity: 0,
+        y: 24,
+        scale: 0.98,
+        duration: 0.28,
+        ease: "power2.in",
         onComplete: () => {
-          // Add subtle floating animation to title
-          gsap.to(titleRef.current, {
-            y: "+=5",
-            duration: 2,
-            repeat: -1,
-            yoyo: true,
-            ease: "sine.inOut",
+          setActiveId(id)
+          gsap.fromTo(
+            detail,
+            { boxShadow: "0 0 0 rgba(147, 51, 234, 0)" },
+            {
+              boxShadow: "0 24px 80px rgba(112, 0, 255, 0.18)",
+              duration: 0.5,
+              ease: "power2.out",
+            }
+          )
+          requestAnimationFrame(() => {
+            gsap.fromTo(
+              content,
+              { opacity: 0, y: -16, scale: 0.99 },
+              {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                duration: 0.5,
+                ease: "power3.out",
+                onComplete: () => {
+                  animateDetailIn()
+                  isAnimatingRef.current = false
+                },
+              }
+            )
           })
         },
-      },
-    )
-
-    // Staggered card animations
-    mainTl.fromTo(
-      cardsRef.current,
-      {
-        opacity: 0,
-        x: -100,
-        rotateY: -10,
-        scale: 0.9,
-        transformOrigin: "left center",
-      },
-      {
-        opacity: 1,
-        x: 0,
-        rotateY: 0,
-        scale: 1,
-        stagger: 0.15,
-        duration: 0.8,
-        ease: "back.out(1.7)",
-      },
-      "-=0.5",
-    )
-
-    // Details section animation
-    mainTl.fromTo(
-      detailsRef.current,
-      {
-        opacity: 0,
-        y: 30,
-        scale: 0.95,
-      },
-      {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        duration: 0.8,
-        ease: "power2.out",
-      },
-      "-=0.3",
-    )
-
-    // Create hover animations for cards
-    cardsRef.current.forEach((card, index) => {
-      // Skip if card is null
-      if (!card) return
-
-      // Hover effect
-      card.addEventListener("mouseenter", () => {
-        if (card.dataset.id !== activeExp) {
-          gsap.to(card, {
-            backgroundColor: "rgba(147, 51, 234, 0.1)",
-            x: 10,
-            duration: 0.3,
-            ease: "power2.out",
-          })
-        }
       })
 
-      card.addEventListener("mouseleave", () => {
-        if (card.dataset.id !== activeExp) {
-          gsap.to(card, {
-            backgroundColor: "transparent",
-            x: 0,
-            duration: 0.3,
-            ease: "power2.out",
-          })
-        }
-      })
-    })
-
-    // Cleanup function
-    return () => {
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill())
-      cardsRef.current.forEach((card) => {
-        if (card) {
-          card.removeEventListener("mouseenter", () => {})
-          card.removeEventListener("mouseleave", () => {})
-        }
-      })
-    }
-  }, [activeExp])
-
-  // Handle card click to change active experience
-  const handleCardClick = (expId) => {
-    // Don't do anything if already active
-    if (expId === activeExp) return
-
-    // Animate out current details
-    gsap.to(detailsRef.current, {
-      opacity: 0,
-      y: 20,
-      duration: 0.3,
-      ease: "power2.in",
-      onComplete: () => {
-        setActiveExp(expId)
-
-        // Reset all cards
-        cardsRef.current.forEach((card) => {
-          if (!card) return
-
-          if (card.dataset.id === expId) {
-            gsap.to(card, {
-              backgroundColor: "rgba(147, 51, 234, 0.15)",
-              x: 15,
-              duration: 0.4,
-              ease: "power2.out",
-            })
-          } else {
-            gsap.to(card, {
-              backgroundColor: "transparent",
-              x: 0,
-              duration: 0.4,
-              ease: "power2.out",
-            })
-          }
+      cardsRef.current.forEach((card, i) => {
+        if (!card) return
+        gsap.to(card, {
+          x: i === index ? 8 : 0,
+          duration: 0.4,
+          ease: "power2.out",
         })
+      })
+    },
+    [activeId, animateDetailIn, moveIndicator]
+  )
 
-        // Animate in new details
-        gsap.fromTo(
-          detailsRef.current,
-          {
-            opacity: 0,
-            y: 20,
-          },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.5,
-            ease: "power2.out",
-          },
-        )
-      },
-    })
-  }
-
-  // Get active experience data
-  const activeExpData = EXPERIENCE_DATA.find((exp) => exp.id === activeExp)
+  useLayoutEffect(() => {
+    animateDetailIn()
+  }, [animateDetailIn])
 
   return (
     <section
       ref={sectionRef}
-      id={MENULINKS[2]?.ref || "experience"}
-      className="min-h-screen flex flex-col justify-center px-4 sm:px-8 md:px-16 lg:px-24 py-16 md:py-24 bg-black text-white relative overflow-hidden"
+      id="experience"
+      className="w-full relative select-none mt-24 md:mt-36 overflow-hidden"
     >
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-black via-black  opacity-80 z-0"></div>
+      <img
+        src="/right-pattern.svg"
+        alt=""
+        className="absolute hidden right-0 top-1/3 w-2/12 max-w-xs lg:block opacity-30 pointer-events-none"
+        loading="lazy"
+        height={700}
+        width={320}
+      />
 
-      {/* Purple accent lines */}
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent transparent opacity-30"></div>
-      <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent transparent opacity-30"></div>
-      <div className="absolute top-20 right-20 w-40 h-40 rounded-full  opacity-5 blur-3xl"></div>
-      <div className="absolute bottom-20 left-20 w-60 h-60 rounded-full opacity-5 blur-3xl"></div>
+      <div
+        ref={glowRef}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(90vw,720px)] h-[420px] rounded-full bg-indigo-dark/20 blur-[120px] pointer-events-none opacity-0"
+        aria-hidden
+      />
 
-      {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto w-full">  
-        <h2
-          ref={titleRef}
-          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-12 sm:mb-16 text-center bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-[#e0c6ff]"
-        >
-          PROFESSIONAL EXPERIENCE
-        </h2>
+      <div className="section-container relative z-10 py-16 md:py-28">
+        <header className="exp-header-reveal mb-12 md:mb-16 max-w-3xl">
+          <p className="uppercase tracking-widest text-gray-light-1 text-sm">
+            Experience
+          </p>
+          <h2 className="text-4xl sm:text-5xl md:text-6xl mt-2 font-medium text-gradient w-fit">
+            Where I&apos;ve Worked
+          </h2>
+          <p className="text-gray-light-3 mt-4 text-base md:text-lg leading-relaxed">
+            Roles across enterprise mobility, QA, and full-stack web — with the
+            stacks I used in each.
+          </p>
+        </header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
-          {/* Experience cards column */}
-          <div className="lg:col-span-1 space-y-4">
-            {EXPERIENCE_DATA.map((exp, index) => (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 xl:gap-14 items-start">
+          {/* Left rail — company picker */}
+          <div className="lg:col-span-4 xl:col-span-4">
+            <div
+              ref={railRef}
+              className="relative flex flex-col gap-3 md:gap-4 lg:pl-5"
+            >
               <div
-                key={exp.id}
-                ref={(el) => (cardsRef.current[index] = el)}
-                data-id={exp.id}
-                onClick={() => handleCardClick(exp.id)}
-                className={`p-4 sm:p-6 rounded-lg border border-[#9333ea]/20 cursor-pointer transition-all duration-300 ${
-                  activeExp === exp.id ? "bg-[#9333ea]/15" : "hover:bg-[#9333ea]/5"
-                }`}
-                style={{
-                  backdropFilter: "blur(8px)",
-                  transform: activeExp === exp.id ? "translateX(15px)" : "translateX(0px)",
-                }}
-              >
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 flex items-center justify-center rounded-lg bg-[#9333ea]/20 text-[#9333ea] font-bold text-xl">
-                    {exp.logo}
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-lg font-semibold">{exp.company}</h3>
-                    <p className="text-sm text-gray-300">{exp.position}</p>
-                    <p className="text-xs text-gray-400 mt-1">{exp.period}</p>
-                  </div>
-                  <ChevronRight
-                    className={`w-5 h-5 text-[#9333ea] transition-transform duration-300 ${
-                      activeExp === exp.id ? "rotate-90" : ""
+                ref={indicatorRef}
+                className="absolute left-0 w-1 h-10 rounded-full bg-gradient-to-b from-purple to-indigo-dark -translate-y-1/2 pointer-events-none hidden lg:block shadow-[0_0_20px_rgba(139,49,255,0.8)]"
+                aria-hidden
+              />
+
+              {EXPERIENCE_DATA.map((exp, index) => {
+                const isActive = activeId === exp.id
+                return (
+                  <button
+                    key={exp.id}
+                    type="button"
+                    ref={(el) => (cardsRef.current[index] = el)}
+                    onClick={() => selectExperience(exp.id, index)}
+                    onMouseEnter={() => {
+                      if (!isActive) {
+                        gsap.to(cardsRef.current[index], {
+                          backgroundColor: "rgba(147, 51, 234, 0.08)",
+                          duration: 0.25,
+                        })
+                      }
+                    }}
+                    onMouseLeave={() => {
+                      if (!isActive) {
+                        gsap.to(cardsRef.current[index], {
+                          backgroundColor: "rgba(255,255,255,0.02)",
+                          duration: 0.25,
+                        })
+                      }
+                    }}
+                    className={`exp-rail-card exp-rail-item w-full text-left rounded-2xl border p-4 sm:p-5 flex items-center gap-4 transition-colors duration-300 outline-none focus-visible:ring-2 focus-visible:ring-purple/50 ${
+                      isActive
+                        ? "border-purple/50 bg-[#9333ea]/12 shadow-[inset_0_0_0_1px_rgba(139,49,255,0.15)]"
+                        : "border-white/10 bg-white/[0.02] hover:border-purple/30"
                     }`}
-                  />
-                </div>
-              </div>
-            ))}
+                    style={{
+                      transform: isActive ? "translateX(8px)" : undefined,
+                    }}
+                  >
+                    <CompanyLogo
+                      src={exp.logoSrc}
+                      alt={`${exp.company} logo`}
+                      size="sm"
+                      wide={exp.id === "dreamsoft"}
+                    />
+                    <div className="min-w-0 flex-1">
+                      <p className="font-semibold text-white text-sm sm:text-base truncate">
+                        {exp.company}
+                      </p>
+                      <p className="text-gray-light-3 text-xs sm:text-sm mt-0.5 line-clamp-1">
+                        {exp.position}
+                      </p>
+                      <p className="text-gray-light-2 text-xs mt-2 font-mono">
+                        {exp.period}
+                      </p>
+                    </div>
+                    <span
+                      className={`flex-shrink-0 w-2 h-2 rounded-full transition-all duration-300 ${
+                        isActive
+                          ? "bg-purple scale-125 shadow-[0_0_12px_#8b31ff]"
+                          : "bg-gray-dark-2"
+                      }`}
+                    />
+                  </button>
+                )
+              })}
+            </div>
           </div>
 
-          {/* Experience details */}
-          <div
-            ref={detailsRef}
-            className="lg:col-span-2 p-6 sm:p-8 rounded-lg border border-[#9333ea]/30 relative"
-            style={{ backdropFilter: "blur(8px)" }}
-          >
-            {/* Decorative elements */}
-            <div className="absolute top-0 right-0 w-20 h-20">
-              <div className="absolute top-0 right-0 w-px h-20 bg-gradient-to-b from-[#9333ea] to-transparent"></div>
-              <div className="absolute top-0 right-0 w-20 h-px bg-gradient-to-l from-[#9333ea] to-transparent"></div>
-            </div>
-            <div className="absolute bottom-0 left-0 w-20 h-20">
-              <div className="absolute bottom-0 left-0 w-px h-20 bg-gradient-to-t from-[#9333ea] to-transparent"></div>
-              <div className="absolute bottom-0 left-0 w-20 h-px bg-gradient-to-r from-[#9333ea] to-transparent"></div>
-            </div>
+          {/* Detail panel */}
+          <div className="lg:col-span-8 xl:col-span-8">
+            <div
+              ref={detailRef}
+              className="relative rounded-2xl border border-purple/25 bg-gradient-to-br from-white/[0.04] to-transparent backdrop-blur-md overflow-hidden"
+            >
+              <div className="absolute top-0 right-0 w-32 h-32 bg-purple/10 blur-3xl rounded-full pointer-events-none" />
+              <div className="absolute bottom-0 left-0 w-24 h-24 bg-indigo-dark/15 blur-2xl rounded-full pointer-events-none" />
 
-            {/* Content */}
-            <div className="mb-6">
-              <h3 className="text-2xl sm:text-3xl font-bold text-white mb-2">{activeExpData.position}</h3>
-              <h4 className="text-xl text-[#9333ea] font-medium mb-4">{activeExpData.company}</h4>
-
-              <div className="flex flex-wrap gap-4 mb-6">
-                <div className="flex items-center gap-1.5 text-sm text-gray-300">
-                  <Clock className="w-4 h-4 text-[#9333ea]" />
-                  <span>{activeExpData.period}</span>
-                </div>
-                <div className="flex items-center gap-1.5 text-sm text-gray-300">
-                  <MapPin className="w-4 h-4 text-[#9333ea]" />
-                  <span>{activeExpData.location}</span>
-                </div>
-                <div className="flex items-center gap-1.5 text-sm text-gray-300">
-                  <ExternalLink className="w-4 h-4 text-[#9333ea]" />
-                  <span>{activeExpData.type}</span>
-                </div>
+              <div className="absolute top-0 right-0 w-16 h-16 pointer-events-none">
+                <div className="absolute top-0 right-0 w-px h-16 bg-gradient-to-b from-purple/80 to-transparent" />
+                <div className="absolute top-0 right-0 h-px w-16 bg-gradient-to-l from-purple/80 to-transparent" />
               </div>
-            </div>
+              <div className="absolute bottom-0 left-0 w-16 h-16 pointer-events-none">
+                <div className="absolute bottom-0 left-0 w-px h-16 bg-gradient-to-t from-purple/60 to-transparent" />
+                <div className="absolute bottom-0 left-0 h-px w-16 bg-gradient-to-r from-purple/60 to-transparent" />
+              </div>
 
-            <div className="mb-8">
-              <h5 className="text-sm uppercase tracking-wider text-gray-400 mb-3">Responsibilities</h5>
-              <p className="text-gray-200 leading-relaxed">{activeExpData.description}</p>
-            </div>
+              <div
+                ref={detailContentRef}
+                className="relative p-6 sm:p-8 md:p-10"
+              >
+                <div className="flex flex-col sm:flex-row sm:items-start gap-6 sm:gap-8">
+                  <div ref={detailLogoRef} className="detail-animate">
+                    <CompanyLogo
+                      src={activeExp.logoSrc}
+                      alt={`${activeExp.company} logo`}
+                      size="lg"
+                      wide={activeExp.id === "dreamsoft"}
+                    />
+                  </div>
 
-            <div>
-              <h5 className="text-sm uppercase tracking-wider text-gray-400 mb-3">Technologies</h5>
-              <div className="flex flex-wrap gap-2">
-                {activeExpData.technologies.map((tech, index) => (
-                  <span
-                    key={index}
-                    className="px-3 py-1 text-sm rounded-full bg-[#9333ea]/10 text-[#9333ea] border border-[#9333ea]/20"
-                  >
-                    {tech}
+                  <div className="flex-1 min-w-0 space-y-4">
+                    <div className="detail-animate">
+                      <h3 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-white leading-tight">
+                        {activeExp.position}
+                      </h3>
+                      <p className="text-lg sm:text-xl text-purple font-medium mt-2">
+                        {activeExp.company}
+                      </p>
+                      <p className="text-gray-light-3 text-sm mt-1">
+                        {activeExp.employmentType}
+                      </p>
+                    </div>
+
+                    <div className="detail-animate flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-light-3">
+                      <span className="inline-flex items-center gap-2">
+                        <Calendar className="w-4 h-4 text-purple flex-shrink-0" />
+                        {activeExp.period}
+                        <span className="text-gray-light-2">
+                          · {activeExp.duration}
+                        </span>
+                      </span>
+                      <span className="inline-flex items-center gap-2">
+                        <MapPin className="w-4 h-4 text-purple flex-shrink-0" />
+                        {activeExp.location}
+                        <span className="text-gray-light-2">
+                          · {activeExp.type}
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="detail-animate mt-8 pt-8 border-t border-white/10">
+                  <div className="flex items-center gap-2 mb-4">
+                    <Sparkles className="w-4 h-4 text-purple" />
+                    <span className="text-xs uppercase tracking-[0.2em] text-gray-light-2 font-medium">
+                      Overview
+                    </span>
+                  </div>
+                  <p className="text-gray-light-1 leading-relaxed text-base md:text-lg max-w-3xl">
+                    {activeExp.description}
+                  </p>
+                </div>
+
+                <div className="detail-animate mt-8">
+                  <span className="text-xs uppercase tracking-[0.2em] text-gray-light-2 font-medium block mb-4">
+                    Technologies & Tools
                   </span>
-                ))}
+                  <div className="flex flex-wrap gap-2.5">
+                    {activeExp.technologies.map((tech) => (
+                      <span
+                        key={tech}
+                        className="exp-tag px-4 py-2 text-sm rounded-full bg-purple/10 text-indigo-light border border-purple/30"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
+
           </div>
         </div>
       </div>

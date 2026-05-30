@@ -1,0 +1,348 @@
+.page {
+  min-height: 100vh;
+  background: #000;
+  color: #fff;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.orb {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(80px);
+}
+
+.orb1 {
+  top: -100px;
+  left: 20%;
+  width: 280px;
+  height: 280px;
+  background: rgba(112, 0, 255, 0.22);
+}
+
+.orb2 {
+  bottom: 10%;
+  right: -60px;
+  width: 240px;
+  height: 240px;
+  background: rgba(139, 49, 255, 0.15);
+}
+
+.toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(0, 0, 0, 0.88);
+  backdrop-filter: blur(16px);
+}
+
+.toolbarInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+}
+
+.toolbarActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.45rem;
+  flex-shrink: 0;
+}
+
+.toolbarBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  height: 2.25rem;
+  min-width: 2.25rem;
+  padding: 0 0.85rem;
+  font-family: theme("fontFamily.mono");
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: theme("colors.gray.light.2");
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  white-space: nowrap;
+  transition:
+    border-color 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+
+  &:hover {
+    border-color: rgba(139, 49, 255, 0.5);
+    color: #fff;
+    transform: translateY(-1px);
+  }
+
+  svg {
+    flex-shrink: 0;
+    width: 14px;
+    height: 14px;
+  }
+}
+
+.downloadBtn {
+  border-color: rgba(139, 49, 255, 0.55);
+  color: #fff;
+  background: linear-gradient(
+    135deg,
+    rgba(139, 49, 255, 0.5),
+    rgba(112, 0, 255, 0.22)
+  );
+  box-shadow: 0 0 28px rgba(112, 0, 255, 0.25);
+
+  &:hover {
+    box-shadow: 0 0 40px rgba(112, 0, 255, 0.45);
+  }
+}
+
+.heroBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(139, 49, 255, 0.35);
+  background: rgba(139, 49, 255, 0.1);
+  font-size: 0.65rem;
+  font-family: theme("fontFamily.mono");
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: theme("colors.indigo.light");
+}
+
+.statRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.65rem;
+  margin-top: 1.5rem;
+}
+
+.statPill {
+  padding: 0.5rem 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  font-family: theme("fontFamily.mono");
+  font-size: 0.65rem;
+  color: theme("colors.gray.light.2");
+  text-align: center;
+
+  strong {
+    display: block;
+    color: theme("colors.indigo.light");
+    font-size: 0.7rem;
+    margin-bottom: 0.15rem;
+  }
+}
+
+.viewerOuter {
+  position: relative;
+  padding: 1px;
+  border-radius: 1.35rem;
+  background: linear-gradient(
+    135deg,
+    rgba(139, 49, 255, 0.6),
+    rgba(112, 0, 255, 0.15),
+    rgba(139, 49, 255, 0.4)
+  );
+  background-size: 200% 200%;
+  animation: borderFlow 6s ease infinite;
+}
+
+@keyframes borderFlow {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.viewerShell {
+  position: relative;
+  border-radius: 1.3rem;
+  background: linear-gradient(
+    165deg,
+    rgba(18, 14, 22, 0.98) 0%,
+    rgba(0, 0, 0, 0.95) 100%
+  );
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+}
+
+.viewerChrome {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+
+  &:first-child {
+    background: rgba(207, 0, 0, 0.55);
+  }
+  &:nth-child(2) {
+    background: rgba(255, 180, 0, 0.45);
+  }
+  &:nth-child(3) {
+    background: rgba(0, 172, 86, 0.45);
+  }
+}
+
+.iframeWrap {
+  position: relative;
+  width: 100%;
+  min-height: 62vh;
+  background: #0e0c12;
+
+  @media (min-width: 640px) {
+    min-height: 70vh;
+  }
+
+  @media (min-width: 1024px) {
+    min-height: calc(100vh - 280px);
+  }
+}
+
+.loader {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  background: rgba(8, 6, 12, 0.94);
+  z-index: 5;
+  transition: opacity 0.45s ease, visibility 0.45s ease;
+
+  &.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
+
+.loaderTrack {
+  width: 160px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.loaderFill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(
+    90deg,
+    theme("colors.purple"),
+    theme("colors.indigo.light")
+  );
+  border-radius: 1rem;
+  transition: width 0.3s ease;
+}
+
+.loaderRing {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid rgba(139, 49, 255, 0.15);
+  border-top-color: theme("colors.purple");
+  animation: resumeSpin 0.85s linear infinite;
+}
+
+@keyframes resumeSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.pdfFrame {
+  display: block;
+  width: 100%;
+  height: 62vh;
+  border: none;
+  background: #141018;
+  cursor: auto;
+
+  @media (min-width: 640px) {
+    height: 70vh;
+  }
+
+  @media (min-width: 1024px) {
+    height: calc(100vh - 280px);
+    min-height: 560px;
+  }
+}
+
+.pdfFallback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  min-height: 50vh;
+  padding: 2rem;
+  text-align: center;
+}
+
+.mobileActionRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  width: 100%;
+  max-width: 260px;
+}
+
+.quickActions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem;
+  margin-top: 1.25rem;
+  max-width: 360px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+@media (max-width: 479px) {
+  .toolbarInner {
+    flex-wrap: wrap;
+  }
+
+  .toolbarActions {
+    width: 100%;
+  }
+
+  .toolbarBtn {
+    flex: 1;
+    min-width: 0;
+    padding: 0 0.5rem;
+  }
+
+  .downloadBtn {
+    flex: 1.15;
+  }
+}

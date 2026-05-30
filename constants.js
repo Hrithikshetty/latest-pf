@@ -37,6 +37,10 @@ export const MENULINKS = [
     name: "Projects",
     ref: "projects",
   },
+  {
+    name: "Gallery",
+    ref: "gallery",
+  },
   // {
   //   name: "Work",
   //   ref: "work",
@@ -44,6 +48,82 @@ export const MENULINKS = [
   {
     name: "Contact",
     ref: "contact",
+  },
+];
+
+export const GALLERY_META = {
+  title: "My Gallery",
+  headline: "Life in frames",
+  tagline:
+    "Photos, achievements, and random memories — the human side behind the code.",
+  pageDescription:
+    "A curated wall of moments, wins, and chaos worth keeping forever.",
+};
+
+export const GALLERY_CATEGORIES = [
+  { id: "all", label: "All" },
+  { id: "photos", label: "Photos" },
+  { id: "achievements", label: "Achievements" },
+  { id: "memories", label: "Memories" },
+];
+
+/** Add images under public/gallery — paths below must match your files */
+export const GALLERY_ITEMS = [
+  {
+    id: "p1",
+    category: "photos",
+    src: "/gallery/photos/01.jpg",
+    title: "Moment one",
+    caption: "Replace with your photo — public/gallery/photos/01.jpg",
+  },
+  {
+    id: "p2",
+    category: "photos",
+    src: "/gallery/photos/02.jpg",
+    title: "Moment two",
+    caption: "A frame from the story you're building.",
+  },
+  {
+    id: "p3",
+    category: "photos",
+    src: "/gallery/photos/03.jpg",
+    title: "Moment three",
+    caption: "Drop 02.jpg, 03.jpg in public/gallery/photos/",
+  },
+  {
+    id: "a1",
+    category: "achievements",
+    src: "/gallery/achievements/01.jpg",
+    title: "Achievement",
+    caption: "Certs, awards, hackathons — public/gallery/achievements/01.jpg",
+  },
+  {
+    id: "a2",
+    category: "achievements",
+    src: "/gallery/achievements/02.jpg",
+    title: "Another win",
+    caption: "Proof that late nights sometimes pay off.",
+  },
+  {
+    id: "m1",
+    category: "memories",
+    src: "/gallery/memories/01.jpg",
+    title: "Core memory",
+    caption: "Trips, people, inside jokes — public/gallery/memories/01.jpg",
+  },
+  {
+    id: "m2",
+    category: "memories",
+    src: "/gallery/memories/02.jpg",
+    title: "Random favorite",
+    caption: "The stuff that doesn't fit a folder but still matters.",
+  },
+  {
+    id: "m3",
+    category: "memories",
+    src: "/gallery/memories/03.jpg",
+    title: "Still here",
+    caption: "More memories coming soon.",
   },
 ];
 

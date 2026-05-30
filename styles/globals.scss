@@ -89,6 +89,15 @@ input[type="checkbox"] {
   cursor: none !important;
 }
 
+/* Standalone pages with PDF/iframes — restore normal cursor */
+html.use-native-cursor,
+html.use-native-cursor *,
+html.use-native-cursor a,
+html.use-native-cursor button,
+html.use-native-cursor iframe {
+  cursor: auto !important;
+}
+
 .outer-menu {
   .checkbox-toggle {
     z-index: 2;

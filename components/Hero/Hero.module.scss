@@ -46,3 +46,46 @@
     }
   }
 
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 2.5rem;
+
+  @media (min-width: 640px) {
+    margin-top: 3rem;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    margin-top: 2.5rem;
+    gap: 2rem;
+  }
+
+  a {
+    @media (max-width: 767px) {
+      padding: 0.38rem 0.95rem;
+      font-size: 0.62rem;
+      border-radius: 0.35rem;
+    }
+  }
+}
+
+.vibeCard {
+  padding: 1.75rem 1.5rem;
+  border-radius: 1.25rem;
+  border: 1px solid rgba(139, 49, 255, 0.22);
+  background: linear-gradient(
+    145deg,
+    rgba(139, 49, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.02) 48%,
+    transparent 100%
+  );
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+
+  @media (min-width: 640px) {
+    padding: 2rem 1.75rem;
+  }
+}
+

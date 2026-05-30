@@ -17,6 +17,7 @@ import Contact from "@/components/Contact/Contact";
 import Footer from "@/components/Footer/Footer";
 import Education from './../components/Education/education';
 import Experience from "@/components/experience/experiece";
+import Gallery from "@/components/Gallery/Gallery";
 
 gsap.registerPlugin(ScrollTrigger);
 gsap.config({ nullTargetWarn: false });
@@ -73,6 +74,7 @@ export default function Home() {
             <Skills />
             <About2 clientHeight={clientHeight} />
             <Projects isDesktop={isDesktop} clientHeight={clientHeight} />
+            <Gallery />
             {/* <Work isDesktop={isDesktop} /> */}
             <Collaboration clientHeight={clientHeight} />
             <Contact />
