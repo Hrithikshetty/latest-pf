@@ -1,12 +1,12 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { useParams, useRouter } from "next/navigation"
+import { useRouter } from "next/router"
 import Image from "next/image"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger"
 import { ScrollToPlugin } from "gsap/dist/ScrollToPlugin"
-import { SplitText } from "gsap/dist/SplitText"
+import { splitIntoChars, revertSplit } from "../../../utils/splitTextChars"
 import { ArrowLeft, ExternalLink, Github, Code, Users, Calendar, CheckCircle2 } from "lucide-react"
 
 // Mock project data - replace with your actual data fetching logic
@@ -53,11 +53,9 @@ const PROJECT_DATA = {
 
 export default function ProjectDetails() {
   const router = useRouter()
-  const { slug } = useParams()
-  const projectSlug = Array.isArray(slug) ? slug[0] : slug
-
-  // Get project data based on slug
-  const project = PROJECT_DATA[projectSlug]
+  const id = router.query.id
+  const projectSlug = Array.isArray(id) ? id[0] : id
+  const project = projectSlug ? PROJECT_DATA[projectSlug] : null
 
   // Refs for animations
   const pageRef = useRef(null)
@@ -74,24 +72,24 @@ export default function ProjectDetails() {
   const [activeImage, setActiveImage] = useState(0)
 
   useEffect(() => {
-    // Register GSAP plugins
-    gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, SplitText)
+    gsap.registerPlugin(ScrollTrigger, ScrollToPlugin)
 
-    // If project doesn't exist, redirect to projects page
+    if (!router.isReady) return
+
     if (!project) {
-      router.push("/projects")
+      router.push("/#projects")
       return
     }
 
-    // Main timeline
+    const titleEl = pageRef.current?.querySelector(".project-title")
+    const subtitleEl = pageRef.current?.querySelector(".project-subtitle")
+    const titleChars = splitIntoChars(titleEl)
+    const subtitleChars = splitIntoChars(subtitleEl)
+
     const mainTl = gsap.timeline()
 
-    // Header animations with text splitting for character animation
-    const titleSplit = new SplitText(".project-title", { type: "chars,words" })
-    const subtitleSplit = new SplitText(".project-subtitle", { type: "chars,words" })
-
     mainTl
-      .from(titleSplit.chars, {
+      .from(titleChars, {
         opacity: 0,
         y: 50,
         rotateX: -90,
@@ -100,7 +98,7 @@ export default function ProjectDetails() {
         ease: "back.out(1.7)",
       })
       .from(
-        subtitleSplit.chars,
+        subtitleChars,
         {
           opacity: 0,
           y: 20,
@@ -231,13 +229,12 @@ export default function ProjectDetails() {
       ease: "power2.out",
     })
 
-    // Cleanup
     return () => {
-      if (titleSplit) titleSplit.revert()
-      if (subtitleSplit) subtitleSplit.revert()
+      revertSplit(titleEl)
+      revertSplit(subtitleEl)
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill())
     }
-  }, [project, router, projectSlug])
+  }, [project, router, projectSlug, router.isReady])
 
   // Handle gallery navigation
   const changeImage = (index) => {
@@ -262,14 +259,23 @@ export default function ProjectDetails() {
     })
   }
 
-  // If project doesn't exist, show loading or empty state
+  if (!router.isReady) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-black text-white">
+        <p className="font-mono text-sm text-gray-light-2 uppercase tracking-widest">
+          Loading…
+        </p>
+      </div>
+    )
+  }
+
   if (!project) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-black text-white">
         <div className="text-center">
           <h1 className="text-2xl font-bold mb-4">Project not found</h1>
           <button
-            onClick={() => router.push("/projects")}
+            onClick={() => router.push("/#projects")}
             className="px-4 py-2 bg-[#9333ea] rounded-md hover:bg-[#7928ca] transition-colors"
           >
             Back to Projects
