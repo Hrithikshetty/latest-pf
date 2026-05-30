@@ -338,7 +338,7 @@ const Experience = () => {
             Where I&apos;ve Worked
           </h2>
           <p className="text-gray-light-3 mt-4 text-base md:text-lg leading-relaxed">
-            Roles across enterprise mobility, QA, and full-stack web — with the
+            Roles across enterprise mobility and full-stack web — with the
             stacks I used in each.
           </p>
         </header>
