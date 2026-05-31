@@ -28,7 +28,9 @@ export default function GalleryPage() {
   const filtered =
     filter === "all"
       ? GALLERY_ITEMS
-      : GALLERY_ITEMS.filter((i) => i.category === filter);
+      : GALLERY_ITEMS.filter(
+          (i) => i.category?.toLowerCase() === filter.toLowerCase()
+        );
 
   const openLightbox = useCallback((item) => {
     setLightboxFailed(false);
@@ -173,10 +175,7 @@ export default function GalleryPage() {
           ))}
         </div>
 
-        <div
-          ref={gridRef}
-          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6"
-        >
+        <div ref={gridRef} className={styles.galleryGrid}>
           {filtered.map((item, i) => (
             <div
               key={item.id}
@@ -235,31 +234,35 @@ export default function GalleryPage() {
           </button>
 
           <div
-            className="gallery-lightbox-panel relative max-w-4xl w-full max-h-[90vh] flex flex-col"
+            className="gallery-lightbox-panel relative max-w-4xl w-full max-h-[92vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="relative aspect-[4/5] sm:aspect-[16/10] rounded-2xl overflow-hidden border border-purple/30 bg-black">
+            <div className={styles.lightboxImageWrap}>
               {!lightboxFailed ? (
                 <Image
                   src={lightbox.src}
                   alt={lightbox.title}
-                  fill
-                  className="object-contain sm:object-cover"
+                  width={1600}
+                  height={1200}
+                  className={styles.lightboxImage}
                   sizes="100vw"
                   priority
                   onError={() => setLightboxFailed(true)}
                 />
               ) : (
-                <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-purple/25 to-black font-mono text-sm text-gray-light-2 px-8 text-center">
-                  Add image at {lightbox.src}
+                <div className="absolute inset-0 flex items-center justify-center font-mono text-sm text-gray-light-2 px-8 text-center">
+                  Could not load {lightbox.src}
                 </div>
               )}
             </div>
             <div className="mt-6 text-center px-4">
-              <p className="text-[10px] uppercase tracking-[0.2em] text-purple mb-2">
-                {lightbox.category}
-              </p>
-              <h2 className="text-xl sm:text-2xl font-semibold text-white">
+              <span className={styles.lightboxCategory}>
+                {lightbox.category
+                  ? lightbox.category.charAt(0).toUpperCase() +
+                    lightbox.category.slice(1).toLowerCase()
+                  : "Gallery"}
+              </span>
+              <h2 className="text-xl sm:text-2xl font-semibold text-white mt-3">
                 {lightbox.title}
               </h2>
               <p className="mt-2 text-gray-light-3 text-sm sm:text-base max-w-lg mx-auto leading-relaxed">
