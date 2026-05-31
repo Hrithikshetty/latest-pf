@@ -1,15 +1,14 @@
 "use client";
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
 import gsap from "gsap";
 import {
-  ArrowLeft,
   X,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
+import SubPageHeader from "../Header/SubPageHeader";
 import {
   GALLERY_ITEMS,
   GALLERY_META,
@@ -35,12 +34,10 @@ export default function GalleryPage() {
   const openLightbox = useCallback((item) => {
     setLightboxFailed(false);
     setLightbox(item);
-    document.body.style.overflow = "hidden";
   }, []);
 
   const closeLightbox = useCallback(() => {
     setLightbox(null);
-    document.body.style.overflow = "";
   }, []);
 
   const goLightbox = useCallback(
@@ -118,6 +115,40 @@ export default function GalleryPage() {
   }, [lightbox]);
 
   useEffect(() => {
+    if (!lightbox) return;
+
+    const scrollY = window.scrollY;
+    const { style: bodyStyle } = document.body;
+    const { style: htmlStyle } = document.documentElement;
+
+    bodyStyle.position = "fixed";
+    bodyStyle.top = `-${scrollY}px`;
+    bodyStyle.width = "100%";
+    bodyStyle.overflow = "hidden";
+    htmlStyle.overflow = "hidden";
+
+    const preventTouchScroll = (e) => {
+      const panel = document.querySelector(".gallery-lightbox-panel");
+      if (panel?.contains(e.target)) return;
+      e.preventDefault();
+    };
+
+    document.addEventListener("touchmove", preventTouchScroll, {
+      passive: false,
+    });
+
+    return () => {
+      bodyStyle.position = "";
+      bodyStyle.top = "";
+      bodyStyle.width = "";
+      bodyStyle.overflow = "";
+      htmlStyle.overflow = "";
+      document.removeEventListener("touchmove", preventTouchScroll);
+      window.scrollTo(0, scrollY);
+    };
+  }, [lightbox]);
+
+  useEffect(() => {
     const onKey = (e) => {
       if (!lightbox) return;
       if (e.key === "Escape") closeLightbox();
@@ -135,20 +166,7 @@ export default function GalleryPage() {
         <div className="absolute bottom-0 right-0 w-[400px] h-[300px] bg-indigo-dark/20 blur-[100px] rounded-full" />
       </div>
 
-      <header className="relative z-20 border-b border-white/[0.06] bg-black/80 backdrop-blur-md">
-        <div className="section-container py-6 flex items-center justify-between">
-          <Link
-            href="/#gallery"
-            className="link flex items-center gap-2 text-sm font-mono text-gray-light-2 hover:text-indigo-light transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back
-          </Link>
-          <Link href="/" className="link opacity-90 hover:opacity-100">
-            <span className="font-mono text-sm text-gray-light-1">HS</span>
-          </Link>
-        </div>
-      </header>
+      <SubPageHeader backHref="/#gallery" backLabel="Back" />
 
       <main className="relative z-10 section-container py-14 md:py-20 pb-24">
         <div className="gallery-page-header text-center max-w-2xl mx-auto mb-12 md:mb-16">
@@ -191,11 +209,15 @@ export default function GalleryPage() {
             No items in this category yet.
           </p>
         )}
+
+        {filtered.length > 0 && (
+          <p className={styles.lazyFooter}>{GALLERY_META.lazyFooter}</p>
+        )}
       </main>
 
       {lightbox && (
         <div
-          className={`gallery-lightbox-backdrop fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8 ${styles.lightbox} bg-black/85`}
+          className={`gallery-lightbox-backdrop fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8 overflow-hidden ${styles.lightbox} bg-black/85`}
           role="dialog"
           aria-modal="true"
           onClick={closeLightbox}
@@ -234,7 +256,7 @@ export default function GalleryPage() {
           </button>
 
           <div
-            className="gallery-lightbox-panel relative max-w-4xl w-full max-h-[92vh] flex flex-col"
+            className={`gallery-lightbox-panel relative max-w-4xl w-full max-h-[92vh] flex flex-col ${styles.lightboxPanel}`}
             onClick={(e) => e.stopPropagation()}
           >
             <div className={styles.lightboxImageWrap}>

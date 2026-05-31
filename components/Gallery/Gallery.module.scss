@@ -158,6 +158,36 @@
 
 .lightbox {
   backdrop-filter: blur(16px);
+  overscroll-behavior: none;
+  touch-action: none;
+}
+
+.lightboxPanel {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+}
+
+.lazyFooter {
+  margin-top: 3.5rem;
+  padding-top: 2rem;
+  border-top: 1px dashed rgba(255, 255, 255, 0.08);
+  max-width: 28rem;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  font-family: theme("fontFamily.mono");
+  font-size: 0.72rem;
+  line-height: 1.75;
+  letter-spacing: 0.04em;
+  color: theme("colors.gray.light.2");
+  opacity: 0.75;
+
+  @media (min-width: 640px) {
+    margin-top: 4.5rem;
+    font-size: 0.78rem;
+  }
 }
 
 .galleryGrid {

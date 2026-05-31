@@ -18,7 +18,7 @@ const ProgressIndicator = () => {
   }, [progressRef]);
 
   return (
-    <div className="progress w-full fixed top-0 z-50">
+    <div className="progress w-full fixed top-0 z-50 pointer-events-none">
       <div ref={progressRef} className="progress-bar"></div>
     </div>
   );

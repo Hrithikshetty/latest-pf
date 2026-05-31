@@ -1,10 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import Link from "next/link";
 import gsap from "gsap";
 import {
-  ArrowLeft,
   Download,
   ExternalLink,
   FileText,
@@ -12,6 +10,7 @@ import {
   Minimize2,
   Sparkles,
 } from "lucide-react";
+import SubPageHeader from "../Header/SubPageHeader";
 import styles from "./Resume.module.scss";
 
 const RESUME_URL = "/resume.pdf";
@@ -74,7 +73,7 @@ export default function ResumePage() {
 
       tl.from(".resume-orb", { opacity: 0, scale: 0.6, duration: 1.2 })
         .from(
-          ".resume-toolbar-item",
+          ".subpage-header-inner > *",
           { opacity: 0, y: -14, duration: 0.5, stagger: 0.05 },
           "-=0.8"
         )
@@ -87,6 +86,11 @@ export default function ResumePage() {
           ".resume-stat",
           { opacity: 0, scale: 0.9, y: 16, duration: 0.5, stagger: 0.07 },
           "-=0.25"
+        )
+        .from(
+          ".resume-viewer-toolbar",
+          { opacity: 0, y: 12, duration: 0.45 },
+          "-=0.35"
         )
         .from(
           viewerRef.current,
@@ -124,53 +128,7 @@ export default function ResumePage() {
       <div className={`resume-orb ${styles.orb} ${styles.orb1}`} aria-hidden />
       <div className={`resume-orb ${styles.orb} ${styles.orb2}`} aria-hidden />
 
-      <header className={styles.toolbar}>
-        <div className={`section-container ${styles.toolbarInner}`}>
-          <Link
-            href="/"
-            className="resume-toolbar-item flex items-center gap-2 text-sm font-mono text-gray-light-2 hover:text-indigo-light transition-colors shrink-0"
-          >
-            <ArrowLeft className="w-4 h-4 shrink-0" />
-            <span className="hidden xs:inline">Back</span>
-          </Link>
-
-          <div className={`resume-toolbar-item ${styles.toolbarActions}`}>
-            <button
-              type="button"
-              onClick={() => setExpanded((e) => !e)}
-              className={`${styles.toolbarBtn} hidden sm:inline-flex`}
-              aria-label={expanded ? "Exit focus mode" : "Focus mode"}
-            >
-              {expanded ? (
-                <Minimize2 />
-              ) : (
-                <Maximize2 />
-              )}
-              <span className="hidden md:inline">Focus</span>
-            </button>
-            <button
-              type="button"
-              onClick={openNewTab}
-              className={styles.toolbarBtn}
-            >
-              <ExternalLink />
-              <span className="hidden sm:inline">Open</span>
-            </button>
-            <button
-              type="button"
-              onClick={handleDownload}
-              className={`${styles.toolbarBtn} ${styles.downloadBtn} relative overflow-hidden`}
-            >
-              <span
-                className="resume-shine absolute inset-0 w-1/2 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full pointer-events-none"
-                aria-hidden
-              />
-              <Download className="relative z-10" />
-              <span className="relative z-10">Download</span>
-            </button>
-          </div>
-        </div>
-      </header>
+      <SubPageHeader backHref="/" backLabel="Back" />
 
       <main
         className={`relative z-10 section-container transition-all duration-500 ${
@@ -206,26 +164,36 @@ export default function ResumePage() {
                 Any device
               </div>
             </div>
-            <div className={`${styles.quickActions} sm:hidden`}>
-              <button
-                type="button"
-                onClick={openNewTab}
-                className={`${styles.toolbarBtn} justify-center`}
-              >
-                <ExternalLink />
-                Open
-              </button>
-              <button
-                type="button"
-                onClick={handleDownload}
-                className={`${styles.toolbarBtn} ${styles.downloadBtn} justify-center`}
-              >
-                <Download />
-                Save
-              </button>
-            </div>
           </div>
         )}
+
+        <div className={`resume-viewer-toolbar ${styles.viewerToolbar}`}>
+          <button
+            type="button"
+            onClick={() => setExpanded((e) => !e)}
+            className={styles.toolbarBtn}
+            aria-label={expanded ? "Exit focus mode" : "Focus mode"}
+          >
+            {expanded ? <Minimize2 /> : <Maximize2 />}
+            <span>Focus</span>
+          </button>
+          <button type="button" onClick={openNewTab} className={styles.toolbarBtn}>
+            <ExternalLink />
+            <span>View</span>
+          </button>
+          <button
+            type="button"
+            onClick={handleDownload}
+            className={`${styles.toolbarBtn} ${styles.downloadBtn} relative overflow-hidden`}
+          >
+            <span
+              className="resume-shine absolute inset-0 w-1/2 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full pointer-events-none"
+              aria-hidden
+            />
+            <Download className="relative z-10" />
+            <span className="relative z-10">Download</span>
+          </button>
+        </div>
 
         <div className={styles.viewerOuter}>
           <div ref={viewerRef} className={styles.viewerShell}>
@@ -295,18 +263,6 @@ export default function ResumePage() {
             </div>
           </div>
         </div>
-
-        <p className="mt-5 sm:mt-7 text-center text-[11px] sm:text-xs text-gray-light-2 font-mono leading-relaxed px-2">
-          Over the PDF? Use{" "}
-          <button
-            type="button"
-            onClick={openNewTab}
-            className="text-indigo-light hover:underline"
-          >
-            Open
-          </button>{" "}
-          for the best mobile experience.
-        </p>
       </main>
     </div>
   );

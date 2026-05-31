@@ -7,8 +7,11 @@ const Menu = () => {
 
     anchorNodes.forEach((el) => {
       el.addEventListener("click", () => {
-        const checkbox = document.querySelector(".checkbox-toggle");
-        checkbox.checked = false;
+        const checkbox = document.getElementById("menu-toggle");
+        if (checkbox) {
+          checkbox.checked = false;
+          checkbox.dispatchEvent(new Event("change", { bubbles: true }));
+        }
       });
     });
   }, []);

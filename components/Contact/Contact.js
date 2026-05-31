@@ -8,6 +8,8 @@ import mail from "./mailer";
 import styles from "./Contact.module.scss";
 import { MENULINKS } from "../../constants";
 
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 const filter = new Filter();
 filter.removeWords("hell", "god", "shit");
 
@@ -45,7 +47,6 @@ const Contact = () => {
 
   const handleChange = ({ target }) => {
     const { id, value } = target;
-    value.length === 0 ? setIsSending(false) : setIsSending(true);
     setFormData((prevVal) => {
       if (
         value.trim() !== prevVal[id] &&
@@ -57,45 +58,64 @@ const Contact = () => {
       }
     });
   };
+  console.log("SERVICE_ID", process.env.NEXT_PUBLIC_SERVICE_ID);
+  console.log("TEMPLATE_ID", process.env.NEXT_PUBLIC_TEMPLATE_ID);
+  console.log("PUBLIC_KEY", process.env.NEXT_PUBLIC_USER_ID);
 
   const emptyForm = () => {
     setFormData(initialState);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { name, email, message } = {
-      name: formData.name,
-      email: formData.email,
-      message: formData.message,
-    };
+    const name = formData.name.trim();
+    const email = formData.email.trim();
+    const message = formData.message.trim();
 
-    if (name === "" || email === "" || message === "") {
+    if (!name || !email || !message) {
       empty();
-      return setMailerResponse("empty");
+      setMailerResponse("empty");
+      return;
+    }
+
+    if (!EMAIL_PATTERN.test(email)) {
+      toast.error("Please enter a valid email address", { id: "error" });
+      return;
     }
 
     setIsSending(true);
-    mail({ name, email, message })
-      .then((res) => {
-        if (res.status === 200) {
-          setMailerResponse("success");
-          emptyForm();
-        } else {
-          setMailerResponse("error");
-        }
-      })
-      .catch((err) => {
+    try {
+      const res = await mail({ name, email, message });
+      if (res?.status === 200) {
+        setMailerResponse("success");
+        emptyForm();
+      } else {
         setMailerResponse("error");
-        console.error(err);
-      });
+      }
+    } catch (err) {
+      setMailerResponse("error");
+      console.error(err);
+    } finally {
+      setIsSending(false);
+    }
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      setMailerResponse("not initiated");
-    }, 10000);
+    if (mailerResponse === "success") {
+      success();
+    } else if (mailerResponse === "error") {
+      error();
+    }
+
+    if (
+      mailerResponse === "empty" ||
+      mailerResponse === "success" ||
+      mailerResponse === "error"
+    ) {
+      const timer = setTimeout(() => setMailerResponse("not initiated"), 10000);
+      return () => clearTimeout(timer);
+    }
   }, [mailerResponse]);
 
   useEffect(() => {
@@ -251,7 +271,7 @@ const Contact = () => {
   return (
     <section
       ref={sectionRef}
-      id={MENULINKS[4].ref}
+      id={MENULINKS[5].ref}
       className="mt-30 w-full relative select-none bg-black pt-20 sm:pt-10 md:pt-5 lg:pt-1 pb-20"
     >
       <div>
@@ -293,7 +313,7 @@ const Contact = () => {
 
             <div className="relative mt-14">
               <input
-                type="text"
+                type="email"
                 id="email"
                 className="block w-full h-12 sm:h-14 px-4 text-xl sm:text-2xl font-mono outline-none border-2 border-purple bg-transparent rounded-[0.6rem] transition-all duration-200"
                 value={formData.email}
@@ -325,23 +345,16 @@ const Contact = () => {
             </div>
           </Fade>
 
-          {mailerResponse !== "not initiated" &&
-            (mailerResponse === "success" ? (
-              <div className="hidden">{success()}</div>
-            ) : (
-              <div className="hidden">{error()}</div>
-            ))}
         </form>
         <div className="mt-9 mx-auto link">
           <button
             ref={buttonElementRef}
             className={styles.button}
             disabled={
-              formData.name === "" ||
-              formData.email === "" ||
-              formData.message === ""
-                ? true
-                : false
+              isSending ||
+              !formData.name.trim() ||
+              !formData.email.trim() ||
+              !formData.message.trim()
             }
             onClick={handleSubmit}
           >

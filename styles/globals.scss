@@ -100,7 +100,17 @@ html.use-native-cursor iframe {
 
 .outer-menu {
   .checkbox-toggle {
-    z-index: 2;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+    opacity: 0;
+    pointer-events: none;
 
     &:checked {
       + {
@@ -125,10 +135,10 @@ html.use-native-cursor iframe {
           visibility: visible !important;
           > div {
             transform: scale(1);
-            transition-duration: 0.75s;
+            transition-duration: 0.45s;
             > div {
               opacity: 1;
-              transition: opacity 0.4s ease 0.4s;
+              transition: opacity 0.25s ease 0.12s;
             }
           }
         }
@@ -146,8 +156,18 @@ html.use-native-cursor iframe {
   }
 
   .hamburger {
-    z-index: 1;
+    position: relative;
+    z-index: 2;
     backface-visibility: hidden;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+
+    /* Larger tap target without shifting visual alignment */
+    &::before {
+      content: "";
+      position: absolute;
+      inset: -0.625rem;
+    }
 
     > div {
       height: 0.125rem;
@@ -249,13 +269,14 @@ html.use-native-cursor iframe {
   .menu {
     backface-visibility: hidden;
     outline: 0.0625rem solid transparent;
+    z-index: 1;
     > div {
       width: 240vw;
       height: 240vw;
       transform: scale(0);
       will-change: transform;
       border-radius: 50%;
-      transition: all 0.4s ease;
+      transition: transform 0.35s ease, visibility 0s linear 0.35s;
       backface-visibility: hidden;
       background: rgba(
         0,

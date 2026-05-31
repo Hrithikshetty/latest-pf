@@ -58,6 +58,8 @@ export const GALLERY_META = {
     "Photos, achievements, and random memories — the human side behind the code.",
   pageDescription:
     "A curated wall of moments, wins, and chaos worth keeping forever.",
+  lazyFooter:
+    "That’s all for now. More photos may or may not land here someday — I’m lazy, no promises.",
 };
 
 export const GALLERY_CATEGORIES = [
