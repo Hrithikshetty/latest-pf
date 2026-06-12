@@ -120,7 +120,7 @@ const Hero = () => {
         </div>
 
         <div className={`staggered-reveal ${styles.heroActions}`}>
-          <Button href={`#${MENULINKS[4].ref}`} classes="link" type="primary">
+          <Button href={`#${MENULINKS[5].ref}`} classes="link" type="primary">
             Let&apos;s Talk
           </Button>
           <Button href={`/resume`} classes="link" type="primary">
