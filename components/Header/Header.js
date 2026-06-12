@@ -30,10 +30,12 @@ const Header = ({ children }) => {
   }, [handleKeyDown]);
 
   return (
-    <nav className="w-full fixed top-0 py-8 z-50 select-none bg-gradient-to-b from-black shadow-black transition-all duration-300">
-      <div className="flex justify-between section-container">
-        <LogoMark href="/#home" />
-        <div className="outer-menu relative flex items-center gap-8 z-[1]">
+    <nav className="w-full fixed top-0 z-50 select-none bg-gradient-to-b from-black shadow-black transition-all duration-300">
+      <div className="section-container flex items-center justify-between min-h-[4.5rem] py-4 md:py-5">
+        <div className="flex items-center shrink-0">
+          <LogoMark href="/#home" />
+        </div>
+        <div className="outer-menu relative flex items-center gap-8 z-[1] shrink-0">
           {/* <SoundBar /> */}
           <input
             ref={inputRef}
@@ -48,7 +50,7 @@ const Header = ({ children }) => {
             htmlFor="menu-toggle"
             id="menu"
             aria-label="Open menu"
-            className="hamburger link w-6 h-6 flex items-center justify-center touch-manipulation"
+            className="hamburger link w-11 h-11 flex items-center justify-center touch-manipulation"
           >
             <div className="relative flex-none w-full bg-white duration-300 flex items-center justify-center" />
           </label>

@@ -61,7 +61,6 @@ export default function LogoMark({ href = "/", className = "" }) {
       });
 
       gsap.to(glow, {
-        scale: 1.15,
         opacity: 0.85,
         duration: 2.2,
         repeat: -1,

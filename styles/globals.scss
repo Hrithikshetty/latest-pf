@@ -158,21 +158,18 @@ html.use-native-cursor iframe {
   .hamburger {
     position: relative;
     z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     backface-visibility: hidden;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
 
-    /* Larger tap target without shifting visual alignment */
-    &::before {
-      content: "";
-      position: absolute;
-      inset: -0.625rem;
-    }
-
     > div {
+      position: relative;
+      width: 1.5rem;
       height: 0.125rem;
       transition: all 0.4s ease;
-      -webkit-box-pack: center;
 
       &:before,
       &:after {
@@ -181,13 +178,17 @@ html.use-native-cursor iframe {
         position: absolute;
         left: 0;
         width: 100%;
-        top: -0.5rem;
         height: 0.125rem;
         background: inherit;
         transition: all 0.4s ease;
       }
+
+      &:before {
+        top: -0.4375rem;
+      }
+
       &:after {
-        top: 0.5rem;
+        top: 0.4375rem;
       }
     }
   }
