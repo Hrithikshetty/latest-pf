@@ -58,9 +58,7 @@ const Contact = () => {
       }
     });
   };
-  console.log("SERVICE_ID", process.env.NEXT_PUBLIC_SERVICE_ID);
-  console.log("TEMPLATE_ID", process.env.NEXT_PUBLIC_TEMPLATE_ID);
-  console.log("PUBLIC_KEY", process.env.NEXT_PUBLIC_USER_ID);
+
 
   const emptyForm = () => {
     setFormData(initialState);
