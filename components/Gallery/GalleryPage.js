@@ -60,21 +60,21 @@ export default function GalleryPage() {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-      tl.from(".gallery-page-bg", { opacity: 0, duration: 1 })
+      tl.from(".gallery-page-bg", { opacity: 0, duration: 0.45 })
         .from(
           ".gallery-page-header > *",
-          { opacity: 0, y: 40, duration: 0.8, stagger: 0.12 },
-          "-=0.6"
+          { opacity: 0, y: 24, duration: 0.48, stagger: 0.06 },
+          "-=0.3"
         )
         .from(
           ".gallery-filter-btn",
-          { opacity: 0, y: 20, duration: 0.5, stagger: 0.06 },
-          "-=0.4"
+          { opacity: 0, y: 14, duration: 0.35, stagger: 0.04 },
+          "-=0.25"
         )
         .from(
           ".gallery-page-item",
-          { opacity: 0, y: 60, scale: 0.94, duration: 0.65, stagger: 0.08 },
-          "-=0.2"
+          { opacity: 0, y: 36, scale: 0.96, duration: 0.45, stagger: 0.05 },
+          "-=0.15"
         );
     }, pageRef);
 
@@ -92,8 +92,8 @@ export default function GalleryPage() {
         opacity: 1,
         scale: 1,
         y: 0,
-        duration: 0.5,
-        stagger: 0.06,
+        duration: 0.38,
+        stagger: 0.04,
         ease: "power3.out",
       }
     );

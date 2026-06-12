@@ -7,6 +7,7 @@ import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import mail from "./mailer";
 import styles from "./Contact.module.scss";
 import { MENULINKS } from "../../constants";
+import { revealFrom, scrollRevealConfig } from "../../utils/animations";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -247,21 +248,16 @@ const Contact = () => {
   }, [buttonElementRef]);
 
   useEffect(() => {
-    const tl = gsap.timeline({ defaults: { ease: "none" } });
-
-    tl.from(
+    const tl = gsap.from(
       sectionRef.current.querySelectorAll(".staggered-reveal"),
-      { opacity: 0, duration: 0.5, stagger: 0.5 },
-      "<"
+      {
+        ...revealFrom,
+        scrollTrigger: scrollRevealConfig(
+          sectionRef.current.querySelector(".contact-wrapper"),
+          "top 88%"
+        ),
+      }
     );
-
-    ScrollTrigger.create({
-      trigger: sectionRef.current.querySelector(".contact-wrapper"),
-      start: "100px bottom",
-      end: "center center",
-      scrub: 0,
-      animation: tl,
-    });
 
     return () => tl.kill();
   }, [sectionRef]);

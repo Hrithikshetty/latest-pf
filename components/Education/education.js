@@ -75,10 +75,10 @@ const Education = () => {
             toggleActions: "play none none reverse",
           },
           opacity: 0,
-          y: 40,
-          duration: 0.9,
-          stagger: 0.1,
-          ease: "power4.out",
+          y: 28,
+          duration: 0.55,
+          stagger: 0.06,
+          ease: "power3.out",
         })
 
         gsap.from(progressRef.current, {
@@ -89,7 +89,7 @@ const Education = () => {
           },
           scaleX: 0,
           opacity: 0,
-          duration: 1.2,
+          duration: 0.7,
           ease: "power3.inOut",
           transformOrigin: "left center",
         })
@@ -102,7 +102,7 @@ const Education = () => {
               trigger: sectionRef.current.querySelector(".edu-journey"),
               start: "top 70%",
               end: "bottom 35%",
-              scrub: 0.8,
+              scrub: 0.25,
             },
             scaleY: 1,
             opacity: 1,
@@ -119,7 +119,7 @@ const Education = () => {
               trigger: sectionRef.current.querySelector(".edu-journey"),
               start: "top 70%",
               end: "bottom 35%",
-              scrub: 0.8,
+              scrub: 0.25,
             },
             scaleY: 1,
             opacity: 0.7,
@@ -144,39 +144,39 @@ const Education = () => {
 
           tl.from(badge, {
             scale: 0,
-            rotation: -180,
-            duration: 0.55,
-            ease: "back.out(2)",
+            rotation: -120,
+            duration: 0.4,
+            ease: "back.out(1.8)",
           })
             .from(
               icon,
-              { scale: 0, opacity: 0, duration: 0.45, ease: "back.out(1.8)" },
-              "-=0.25"
+              { scale: 0, opacity: 0, duration: 0.35, ease: "back.out(1.6)" },
+              "-=0.2"
             )
             .from(
               card,
               {
                 opacity: 0,
-                x: index % 2 === 0 ? -50 : 50,
-                y: 30,
-                rotateY: index % 2 === 0 ? 8 : -8,
-                duration: 0.75,
+                x: index % 2 === 0 ? -36 : 36,
+                y: 20,
+                rotateY: index % 2 === 0 ? 6 : -6,
+                duration: 0.5,
                 ease: "power3.out",
                 transformPerspective: 900,
               },
-              "-=0.2"
+              "-=0.15"
             )
             .from(
               tags,
               {
                 opacity: 0,
-                y: 12,
-                scale: 0.85,
-                stagger: 0.06,
-                duration: 0.4,
+                y: 10,
+                scale: 0.9,
+                stagger: 0.04,
+                duration: 0.3,
                 ease: "power2.out",
               },
-              "-=0.35"
+              "-=0.25"
             )
 
           const yearEl = node.querySelector(".edu-year")

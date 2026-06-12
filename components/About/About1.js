@@ -10,7 +10,7 @@ const About1 = ({ clientHeight }) => {
     const ctx = gsap.context(() => {
       const tl = gsap
         .timeline({
-          defaults: { ease: "none", duration: 0.1 },
+          defaults: { ease: "power2.inOut", duration: 0.15 },
         })
         .fromTo(
           quoteRef.current.querySelector(".about-1"),
@@ -19,7 +19,7 @@ const About1 = ({ clientHeight }) => {
         )
         .to(quoteRef.current.querySelector(".about-1"), {
           opacity: 0.2,
-          delay: 0.5,
+          delay: 0.25,
         })
         .fromTo(
           quoteRef.current.querySelector(".about-2"),
@@ -29,7 +29,7 @@ const About1 = ({ clientHeight }) => {
         )
         .to(quoteRef.current.querySelector(".about-2"), {
           opacity: 0.2,
-          delay: 1,
+          delay: 0.4,
         });
 
       ScrollTrigger.create({

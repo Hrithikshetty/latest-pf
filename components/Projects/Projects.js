@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { MENULINKS, PROJECTS } from "../../constants";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
+import { revealFrom, scrollRevealConfig } from "../../utils/animations";
 import ProjectTile from "./ProjectTile/ProjectTile";
 import Button from "../Button/Button";
 
@@ -25,31 +26,23 @@ const Projects = ({ isDesktop, clientHeight }) => {
     const [revealTimeline, revealScrollTrigger] = getRevealSt();
 
     return () => {
-      projectsScrollTrigger && projectsScrollTrigger.kill();
-      projectsTimeline && projectsTimeline.kill();
-      revealScrollTrigger && revealScrollTrigger.kill();
-      revealTimeline && revealTimeline.progress(1);
+      projectsScrollTrigger?.kill();
+      projectsTimeline?.kill();
+      revealScrollTrigger?.kill();
+      revealTimeline?.kill();
     };
   }, [sectionRef, sectionTitleRef, isDesktop]);
 
   const getRevealSt = () => {
-    const revealTl = gsap.timeline({ defaults: { ease: "none" } });
-
-    revealTl.from(
+    const revealTl = gsap.from(
       sectionRef.current.querySelectorAll(".staggered-reveal"),
-      { opacity: 0, duration: 0.5, stagger: 0.5 },
-      "<"
+      {
+        ...revealFrom,
+        scrollTrigger: scrollRevealConfig(sectionRef.current, "top 90%"),
+      }
     );
 
-    const scrollTrigger = ScrollTrigger.create({
-      trigger: sectionRef.current,
-      start: "top bottom",
-      end: "bottom bottom",
-      scrub: 0,
-      animation: revealTl,
-    });
-
-    return [revealTl, scrollTrigger];
+    return [revealTl, revealTl.scrollTrigger];
   };
 
   const getProjectsSt = () => {

@@ -1,58 +1,58 @@
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
+import { ANIM } from "../../utils/animations";
 
 const Collaboration = ({ clientHeight }) => {
   const sectionRef = useRef(null);
   const quoteRef = useRef(null);
 
-  useEffect(() => {
-    const smallScreen = document.body.clientWidth < 767;
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      const smallScreen = document.body.clientWidth < 767;
 
-    const timeline = gsap.timeline({
-      defaults: { ease: "none" },
-    });
-
-    timeline
-      .from(quoteRef.current, { opacity: 0, duration: 2 })
-      .to(quoteRef.current.querySelector(".text-strong"), {
-        backgroundPositionX: "100%",
-        duration: 1,
+      const timeline = gsap.timeline({
+        defaults: { ease: ANIM.ease },
       });
 
-    const slidingTl = gsap.timeline({ defaults: { ease: "none" } });
+      timeline
+        .from(quoteRef.current, { opacity: 0, duration: 0.55 })
+        .to(quoteRef.current.querySelector(".text-strong"), {
+          backgroundPositionX: "100%",
+          duration: 0.45,
+        });
 
-    slidingTl
-      .to(sectionRef.current.querySelector(".ui-left"), {
-        xPercent: smallScreen ? -500 : -150,
-      })
-      .from(
-        sectionRef.current.querySelector(".ui-right"),
-        { xPercent: smallScreen ? -500 : -150 },
-        "<"
-      );
+      const slidingTl = gsap.timeline({ defaults: { ease: "none" } });
 
-    ScrollTrigger.create({
-      trigger: sectionRef.current,
-      start: "center bottom",
-      end: "center center",
-      scrub: 1,
-      animation: timeline,
-    });
+      slidingTl
+        .to(sectionRef.current.querySelector(".ui-left"), {
+          xPercent: smallScreen ? -500 : -150,
+        })
+        .from(
+          sectionRef.current.querySelector(".ui-right"),
+          { xPercent: smallScreen ? -500 : -150 },
+          "<"
+        );
 
-    ScrollTrigger.create({
-      trigger: sectionRef.current,
-      start: "top bottom",
-      end: "bottom top",
-      scrub: 1,
-      animation: slidingTl,
-    });
+      ScrollTrigger.create({
+        trigger: sectionRef.current,
+        start: "center bottom",
+        end: "center center",
+        scrub: 0.3,
+        animation: timeline,
+      });
 
-    return () => {
-      timeline.kill();
-      slidingTl.kill();
-    };
-  }, [quoteRef, sectionRef]);
+      ScrollTrigger.create({
+        trigger: sectionRef.current,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: 0.3,
+        animation: slidingTl,
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
     <section ref={sectionRef} className="w-full relative select-none my-40">

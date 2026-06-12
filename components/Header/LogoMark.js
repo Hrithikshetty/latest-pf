@@ -83,11 +83,11 @@ export default function LogoMark({ href = "/", className = "" }) {
 
       gsap.from(letter, {
         scale: 0,
-        rotation: -180,
+        rotation: -120,
         opacity: 0,
-        duration: 0.9,
-        ease: "back.out(2.2)",
-        delay: 0.15,
+        duration: 0.5,
+        ease: "back.out(1.8)",
+        delay: 0.05,
       });
     }, root);
 

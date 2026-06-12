@@ -5,6 +5,7 @@ import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import Tabs from "./Tabs/Tabs";
 import StickyScroll from "./StickyScroll/StickyScroll";
 import { MENULINKS, WORK_CONTENTS } from "../../constants";
+import { revealFrom, scrollRevealConfig } from "../../utils/animations";
 
 const Work = ({ isDesktop }) => {
   const sectionRef = useRef(null);
@@ -47,21 +48,16 @@ const Work = ({ isDesktop }) => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      const tl = gsap
-        .timeline({ defaults: { ease: "none" } })
-        .from(
-          sectionRef.current.querySelectorAll(".staggered-reveal"),
-          { opacity: 0, duration: 0.5, stagger: 0.5 },
-          "<"
-        );
-
-      ScrollTrigger.create({
-        trigger: sectionRef.current.querySelector(".work-wrapper"),
-        start: "100px bottom",
-        end: "center center",
-        scrub: 0,
-        animation: tl,
-      });
+      gsap.from(
+        sectionRef.current.querySelectorAll(".staggered-reveal"),
+        {
+          ...revealFrom,
+          scrollTrigger: scrollRevealConfig(
+            sectionRef.current.querySelector(".work-wrapper"),
+            "top 88%"
+          ),
+        }
+      );
     });
 
     return () => ctx.revert();

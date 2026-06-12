@@ -4,27 +4,23 @@ import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import { MENULINKS, SKILLS } from "../../constants";
+import { revealFrom, scrollRevealConfig } from "../../utils/animations";
 
 const Skills = () => {
   const sectionRef = useRef(null);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      const tl = gsap
-        .timeline({ defaults: { ease: "none" } })
-        .from(
-          sectionRef.current.querySelectorAll(".staggered-reveal"),
-          { opacity: 0, duration: 0.5, stagger: 0.5 },
-          "<"
-        );
-
-      ScrollTrigger.create({
-        trigger: sectionRef.current.querySelector(".skills-wrapper"),
-        start: "100px bottom",
-        end: "center center",
-        scrub: 0,
-        animation: tl,
-      });
+      gsap.from(
+        sectionRef.current.querySelectorAll(".staggered-reveal"),
+        {
+          ...revealFrom,
+          scrollTrigger: scrollRevealConfig(
+            sectionRef.current.querySelector(".skills-wrapper"),
+            "top 88%"
+          ),
+        }
+      );
     });
 
     return () => ctx.revert();

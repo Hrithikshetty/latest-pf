@@ -20,7 +20,7 @@ import Experience from "@/components/experience/experiece";
 import Gallery from "@/components/Gallery/Gallery";
 
 gsap.registerPlugin(ScrollTrigger);
-gsap.config({ nullTargetWarn: false });
+gsap.config({ nullTargetWarn: false, force3D: true });
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -31,7 +31,7 @@ export default function Home() {
   useEffect(() => {
     setTimeout(() => {
       setIsLoading(false);
-    }, 2600);
+    }, 1600);
     console.log("Hrithik Shetty")
   }, []);
 

@@ -26,9 +26,9 @@ const Gallery = () => {
           toggleActions: "play none none reverse",
         },
         opacity: 0,
-        y: 36,
-        duration: 0.85,
-        stagger: 0.1,
+        y: 24,
+        duration: 0.5,
+        stagger: 0.06,
         ease: "power3.out",
       });
 
@@ -39,10 +39,10 @@ const Gallery = () => {
           toggleActions: "play none none reverse",
         },
         opacity: 0,
-        y: 50,
-        scale: 0.92,
-        duration: 0.75,
-        stagger: 0.1,
+        y: 32,
+        scale: 0.95,
+        duration: 0.48,
+        stagger: 0.07,
         ease: "power3.out",
       });
 
@@ -53,8 +53,8 @@ const Gallery = () => {
           toggleActions: "play none none reverse",
         },
         opacity: 0,
-        y: 24,
-        duration: 0.7,
+        y: 18,
+        duration: 0.45,
         ease: "power2.out",
       });
 

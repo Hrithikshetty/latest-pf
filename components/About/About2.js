@@ -10,12 +10,12 @@ const About2 = ({ clientHeight }) => {
     const ctx = gsap.context(() => {
       const tl = gsap
         .timeline({
-          defaults: { ease: "none", duration: 0.1 },
+          defaults: { ease: "power3.out" },
         })
-        .from(quoteRef.current, { opacity: 0, duration: 2 })
+        .from(quoteRef.current, { opacity: 0, duration: 0.6 })
         .to(quoteRef.current.querySelector(".about-3"), {
           backgroundPositionX: "100%",
-          duration: 1,
+          duration: 0.5,
         });
 
       ScrollTrigger.create({

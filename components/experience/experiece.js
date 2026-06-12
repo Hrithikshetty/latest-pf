@@ -121,7 +121,7 @@ const Experience = () => {
     if (animate) {
       gsap.to(indicator, {
         y,
-        duration: 0.55,
+        duration: 0.38,
         ease: "power3.inOut",
       })
     } else {
@@ -141,10 +141,10 @@ const Experience = () => {
             toggleActions: "play none none reverse",
           },
           opacity: 0,
-          y: 48,
-          duration: 1,
-          stagger: 0.1,
-          ease: "power4.out",
+          y: 28,
+          duration: 0.55,
+          stagger: 0.06,
+          ease: "power3.out",
         })
 
         gsap.from(".exp-rail-card", {
@@ -154,10 +154,10 @@ const Experience = () => {
             toggleActions: "play none none reverse",
           },
           opacity: 0,
-          x: -60,
-          rotateY: -12,
-          duration: 0.85,
-          stagger: 0.12,
+          x: -40,
+          rotateY: -8,
+          duration: 0.5,
+          stagger: 0.07,
           ease: "power3.out",
           transformPerspective: 800,
         })
@@ -169,9 +169,9 @@ const Experience = () => {
             toggleActions: "play none none reverse",
           },
           opacity: 0,
-          x: 80,
-          scale: 0.96,
-          duration: 1,
+          x: 48,
+          scale: 0.97,
+          duration: 0.55,
           ease: "power3.out",
         })
 
@@ -214,18 +214,18 @@ const Experience = () => {
     gsap.fromTo(
       logo,
       { scale: 0.85, opacity: 0, rotate: -6 },
-      { scale: 1, opacity: 1, rotate: 0, duration: 0.6, ease: "back.out(1.6)" }
+      { scale: 1, opacity: 1, rotate: 0, duration: 0.42, ease: "back.out(1.5)" }
     )
 
     gsap.fromTo(
       blocks,
-      { opacity: 0, y: 28, filter: "blur(6px)" },
+      { opacity: 0, y: 20, filter: "blur(4px)" },
       {
         opacity: 1,
         y: 0,
         filter: "blur(0px)",
-        duration: 0.65,
-        stagger: 0.08,
+        duration: 0.45,
+        stagger: 0.05,
         ease: "power3.out",
       }
     )
@@ -237,10 +237,10 @@ const Experience = () => {
         opacity: 1,
         scale: 1,
         y: 0,
-        duration: 0.45,
-        stagger: 0.035,
-        ease: "back.out(1.4)",
-        delay: 0.25,
+        duration: 0.35,
+        stagger: 0.03,
+        ease: "back.out(1.3)",
+        delay: 0.12,
       }
     )
   }, [])

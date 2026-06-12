@@ -295,20 +295,32 @@ html.use-native-cursor iframe {
       ul {
         li {
           a {
-            background: linear-gradient(
-              90deg,
-              #ffffff 0%,
-              #ffffff 50%,
-              #8b31ff 51%,
-              #7000ff 100%
-            );
-            background-size: 200% 100%;
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: #ffffff;
+            -webkit-text-fill-color: #ffffff;
+            transition: color 0.3s ease, background-position 0.3s ease;
 
-            &:hover {
-              background-position: 100% 0;
+            @media (hover: hover) and (pointer: fine) {
+              background: linear-gradient(
+                90deg,
+                #ffffff 0%,
+                #ffffff 50%,
+                #8b31ff 51%,
+                #7000ff 100%
+              );
+              background-size: 200% 100%;
+              background-clip: text;
+              -webkit-background-clip: text;
+              color: transparent;
+              -webkit-text-fill-color: transparent;
+
+              &:hover {
+                background-position: 100% 0;
+              }
+            }
+
+            &:active {
+              color: theme("colors.indigo.light");
+              -webkit-text-fill-color: theme("colors.indigo.light");
             }
           }
         }

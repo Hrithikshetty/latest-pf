@@ -6,13 +6,14 @@ import Button from "../Button/Button";
 import Profiles from "../Profiles/Profiles";
 import styles from "./Hero.module.scss";
 import { MENULINKS, TYPED_STRINGS } from "../../constants";
+import { ANIM, revealFrom } from "../../utils/animations";
 
 const options = {
   strings: TYPED_STRINGS,
-  typeSpeed: 50,
-  startDelay: 1500,
-  backSpeed: 50,
-  backDelay: 8000,
+  typeSpeed: 45,
+  startDelay: 500,
+  backSpeed: 40,
+  backDelay: 5000,
   loop: true,
 };
 
@@ -28,12 +29,12 @@ const Hero = () => {
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       gsap
-        .timeline({ defaults: { ease: "none" } })
-        .to(sectionRef.current, { opacity: 1, duration: 2 })
+        .timeline({ defaults: { ease: ANIM.ease } })
+        .to(sectionRef.current, { opacity: 1, duration: ANIM.fadeDuration })
         .from(
           sectionRef.current.querySelectorAll(".staggered-reveal"),
-          { opacity: 0, duration: 0.5, stagger: 0.5 },
-          "<"
+          revealFrom,
+          "<0.1"
         );
     }, sectionRef);
 
