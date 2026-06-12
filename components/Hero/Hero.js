@@ -8,15 +8,6 @@ import styles from "./Hero.module.scss";
 import { MENULINKS, TYPED_STRINGS } from "../../constants";
 import { ANIM, revealFrom } from "../../utils/animations";
 
-const options = {
-  strings: TYPED_STRINGS,
-  typeSpeed: 45,
-  startDelay: 500,
-  backSpeed: 40,
-  backDelay: 5000,
-  loop: true,
-};
-
 const Hero = () => {
   const [lottie, setLottie] = useState(null);
 
@@ -42,9 +33,19 @@ const Hero = () => {
   }, []);
 
   useEffect(() => {
-    const typed = new Typed(typedElementRef.current, options);
+    if (!typedElementRef.current) return;
+
+    const typed = new Typed(typedElementRef.current, {
+      strings: TYPED_STRINGS,
+      typeSpeed: 45,
+      startDelay: 500,
+      backSpeed: 40,
+      backDelay: 5000,
+      loop: true,
+    });
+
     return () => typed.destroy();
-  }, [typedElementRef]);
+  }, []);
 
   useEffect(() => {
     import("lottie-web").then((Lottie) => setLottie(Lottie.default));
